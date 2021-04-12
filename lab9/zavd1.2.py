@@ -4,6 +4,13 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import np_utils
 
+import keras 
+from keras.models import Sequential
+from keras.layers import Conv2D
+from keras.layers import MaxPooling2D
+from keras.layers import Flatten
+from keras.layers import Dense
+
 np.random.seed(42)
 (х_train, y_train), (x_test, y_test) = mnist.load_data()
 х_train = х_train.reshape(60000, 784)
@@ -18,7 +25,14 @@ model = Sequential()
 
 model.add(Dense(800, input_dim=784, activation="relu", kernel_initializer="normal"))
 
-model.add(Dense(10, activation="softmax", kernel_initializer="normal"))
+
+model.add(Flatten())
+
+model.add(Dense(units = 120, activation = 'relu'))
+
+model.add(Dense(units = 84, activation = 'relu'))
+
+model.add(Dense(units = 10, activation="softmax", kernel_initializer="normal"))
 
 model.compile(loss="categorical_crossentropy", optimizer="SGD", metrics=["accuracy"])
 
@@ -28,7 +42,3 @@ model.fit(х_train, y_train, batch_size=200, epochs=100, validation_split=0.2, v
 
 scores = model.evaluate(x_test, y_test, verbose=0)
 print("Точність роботи на тестових даних: %.2f%%" % (scores[1]*100))
-
-print('model will be saved')
-model.save('saved.model')
-print('~~model saved~~')
